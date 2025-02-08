@@ -1,0 +1,348 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: #f4f4f9;
+  display: flex;
+  min-height: 100vh; /* Allows the body to grow beyond viewport height */
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  flex-direction: column; /* Enables stacking of elements */
+  align-items: center; /* Centers content horizontally */
+  justify-content: flex-start; /* Aligns content to the top */}
+
+.voting-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Wrap content if it overflows */
+}
+
+
+
+.container {
+  flex: 1; /* Allow the card to take available space */
+  margin-right: 20px; /* Add spacing between card and button */
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 600px;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+
+
+
+
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 1rem;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 4px 0;
+  border: 1px solid #ddd;
+  border-radius:4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+button {
+  width: 100%;
+  padding: 10px 10px;
+  background-color: #4CAF50;
+  
+  
+  font-size: 16px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+  
+
+
+
+
+
+
+
+
+
+
+  button:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+
+}
+
+.vote-counts {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.vote-counts p {
+  font-size: 1rem;
+  color: #333;
+}
+
+.results {
+  margin-top: 20px;
+}
+
+#blockchainTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+}
+.blockchain-details h2 {
+  text-align: center;
+  color: #2c3e50; /* Dark grey */
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 0px;
+  
+}
+
+/* Style the table container */
+.table-container {
+  max-height: 400px; /* Sets a fixed height for the table container */
+  overflow-y: auto; /* Adds vertical scroll if content exceeds the height */
+  margin: 0 auto;
+  
+  
+
+}
+
+
+#blockchainTable th, #blockchainTable td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+#blockchainTable th {
+  background-color: #f1f1f1;
+}
+
+#blockchainTable tr:nth-child() {
+  background-color: #f1f1f1;
+}
+
+#blockchainTable tr:hover {
+  background-color: wheat;
+}
+
+#blockchainTable td {
+  font-size: 0.7rem;
+}
+
+
+@media (max-width: 600px) {
+  .card {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1rem;
+  }
+
+  button {
+    font-size: 0.7rem;
+  }
+}
+.vote-counts {
+  margin-top: 10px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vote-counts h2 {
+  color: #333;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.vote-counts p {
+  font-size: 1 rem;
+  font-weight: bold;
+  color: #444;
+  margin: 4 px 0;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.vote-counts p:hover {
+  background-color: #e7f5e7;
+  transform: scale(1.04);
+}
+
+.vote-counts p#bjp {
+  background-color: orange; /* Orange */
+}
+
+.vote-counts p#congress {
+  background-color: lightblue; /* Blue */
+}
+
+.vote-counts p#aap {
+  background-color: yellow; /* Green */
+}
+
+
+
+.blockchain-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+/* Align the button to the right */
+.tampering-section {
+  align-items: center;
+  flex: 0 1 auto; /* Ensure it doesn't shrink too much */
+  display: flex;
+  justify-content: flex-end;  /* Align button to the right */
+  margin-top: 10px;           /* Add space above the button */
+  flex-direction: column;     /* Very important so that result below the button */
+      
+}
+
+/* Style the tampering button */
+#checkTampering {
+  padding: 10px 10px;
+  font-size: 16px;
+  flex: 0 1 auto;
+  cursor: pointer;
+  background-color: rgb(146, 200, 218); /* Blue button color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+#showVotersButton{
+  padding: 10px 10px;
+  font-size: 16px;
+  flex: 0 1 auto;
+  cursor: pointer;
+  background-color: rgb(146, 200, 218); /* Blue button color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin-top: 40px;
+  
+  transition: background-color 0.3s ease;
+}
+#showVotersButton:hover {
+  background-color: #77b4f5;
+  transform: scale(1.1);
+}
+#visualizeButton {
+  padding: 10px 10px;
+  font-size: 16px;
+  flex: 0 1 auto;
+  cursor: pointer;
+  background-color: rgb(146, 200, 218); /* Blue button color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  margin-top: 40px;
+}
+
+
+
+
+#visualizeButton:hover {
+  background-color: #77b4f5;
+  transform: scale(1.1);
+}
+/* Button hover effect */
+#checkTampering:hover {
+  background-color: #77b4f5;
+  transform: scale(1.1);
+}
+
+@media (max-width: 600px) {
+  .vote-counts p {
+    font-size: 0.7rem;
+  }
+
+  .vote-counts h2 {
+    font-size: 0.7rem;
+  }
+  
+  
+}

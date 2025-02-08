@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Voting System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="voting-wrapper">
+      <!-- Voting Card -->
+      <div class="card">
+        
+        <div class="form-group">
+          <label for="voterID">Voter ID:</label>
+          <input type="text" id="voterID" placeholder="Enter your voter ID">
+        
+        </div>
+        <div class="form-group">
+          <label for="age">Age:</label>
+          <input type="number" id="age" placeholder="Enter your age">
+        </div>
+
+        <button onclick="verifyVoter()">Verify Voter Eligibility</button>
+        <p id="verificationResult" style="font-weight: bold;"></p>
+
+        <div class="form-group">
+          <label for="candidate">Select Candidate:</label>
+          <select id="candidate">
+            <option value="BJP">BJP</option>
+            <option value="Congress">Congress</option>
+            <option value="AAP">AAP</option>
+          </select>
+        </div>
+        <button onclick="castVote()">Cast Vote</button>
+
+
+        <p id="encryptedVoterID" style="font-weight: bold;"></p> <!-- Display encrypted Voter ID -->
+
+        <div class="vote-counts">
+          <h2>Vote Counts:</h2>
+          <p id="bjp">BJP: 0</p> 
+          <p id="congress">Congress: 0</p>
+          <p id="aap">AAP: 0</p>
+        </div>
+      </div>
+
+      <!-- Blockchain Tampering Detection -->
+      <div class="tampering-section">
+
+        <button id="checkTampering">Blockchain Tampering Detection</button>
+        <div id="result" style="margin-top: 10px; font-weight: bold; display: block;"></div>
+
+
+
+      
+
+        
+        <button id="showVotersButton">Show Registered Voters</button>
+        <div id="voterListContainer" class="voter-list" ></div>
+
+        <div style="display: flex; font-weight: bold ; flex-direction: column; align-items: flex-start; margin-top: 20px;" class="visualize-btn-wrapper">
+          <button id="visualizeButton">Visualize Blockchain</button>
+        </div>
+
+        <div style="display: flex; font-weight: bold ; flex-direction: column; align-items: flex-start; margin-top: 60px;">
+          <label for="encryptedIDInput" >Enter Encrypted Voter ID:</label>
+          <input type="text" id="encryptedIDInput" placeholder="Enter encrypted voter ID" style="font-weight: bold ;margin-bottom: 16px;">
+          <button onclick="verifyVote()" id="checkTampering">Check My Vote</button>
+          <p id="voteCheckResult" style="font-weight: bold; margin-top: 14px;"></p>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+
+
+
+    
+    </div>
+
+    
+    <!-- Blockchain Details -->
+
+    
+    <div class="blockchain-details" style="margin-top: 20px;">
+      
+      <h2>Blockchain Details</h2>
+      <div class="table-container">
+      <table id="blockchainTable">
+        <thead>
+          <tr>
+            <th>Block</th>
+            <th>Timestamp</th>
+            <th>Encrypted VoterID</th>
+            <th>Candidate</th>
+            <th>Hash</th>
+            <th>Previous Block Hash</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    
+    </div>
+  </div>
+  </div>
+
+  <!-- Script References -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+  <script src="blockchain.js"></script>
+  <script>
+
+ const eligibleVoters = new Set(["1234", "6780", "11223", "12347"]); // Mock eligible voters list
+const votedVoters = new Set();
+const voteCounts = { 'BJP': 0, 'Congress': 0, 'AAP': 0 }; // Store vote counts in an object
+    
+
+
+
+
+
+
+
+
+
+
+
+
+ // Function to hash the Voter ID
+const blockchain = new Blockchain();
+
+
+  function hashVoterID(voterID) {
+      return CryptoJS.SHA256(voterID).toString(CryptoJS.enc.Hex);
+    }
+function verifyVoter() {
+      const voterID = document.getElementById('voterID').value.trim();
+      const age = parseInt(document.getElementById('age').value.trim());
+
+      if (!voterID || isNaN(age)) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      if (!eligibleVoters.has(voterID)) {
+        document.getElementById('verificationResult').textContent = 'Voter ID is not eligible.';
+        document.getElementById('verificationResult').style.color = 'red';
+        return;
+      }
+
+      const minimumAge = 18;
+      if (age < minimumAge) {
+        document.getElementById('verificationResult').textContent = 'You must be at least 18 years old to vote.';
+        document.getElementById('verificationResult').style.color = 'red';
+        return;
+      }
+      const hashedVoterID = hashVoterID(voterID);
+      document.getElementById('verificationResult').textContent = 'Voter is eligible to vote.';
+      document.getElementById('verificationResult').style.color = 'green';
+      document.getElementById('encryptedVoterID').textContent = `Encrypted Voter ID: ${hashedVoterID}`;
+    }
+
+document.getElementById('checkTampering').addEventListener('click', () => {
+      const isBlockchainValid = blockchain.detectTampering();
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = isBlockchainValid 
+        ? 'Blockchain is valid and secure.' 
+        : 'Blockchain has been tampered';
+      resultDiv.style.color = isBlockchainValid ? 'green' : 'red';
+    });
+
+    
+
+    // Update Blockchain Table
+    
+    function loadVoteCounts() {
+      const storedVoteCounts = JSON.parse(localStorage.getItem('voteCounts'));
+      if (storedVoteCounts) {
+        Object.assign(voteCounts, storedVoteCounts);
+      }
+      updateVoteCounts();
+    }
+
+    function saveVoteCounts() {
+      localStorage.setItem('voteCounts', JSON.stringify(voteCounts));
+    }
+
+    // Update the displayed vote counts
+    
+    function updateVoteCounts() {
+      document.getElementById('bjp').textContent = `BJP: ${voteCounts['BJP']}`;
+      document.getElementById('congress').textContent = `Congress: ${voteCounts['Congress']}`;
+      document.getElementById('aap').textContent = `AAP: ${voteCounts['AAP']}`;
+    }
+  
+    function castVote() {
+      const voterID = document.getElementById('voterID').value.trim();
+      const age = parseInt(document.getElementById('age').value.trim());
+      const candidate = document.getElementById('candidate').value;
+
+      
+      if (!voterID || isNaN(age) || !candidate) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+     // Eligibility check: Ensure voter ID is eligible
+    if (!eligibleVoters.has(voterID)) {
+        alert('You are not an eligible voter.');
+        return;
+    }
+    if (isVoterVoted(voterID)) {
+    alert('You have already cast your vote.');
+    return;
+  }
+
+      const result = blockchain.castVote(voterID, age, candidate);
+      alert(result.message);
+      
+      
+      
+      
+      
+      
+      
+      if (result.success) {
+        storeVoter(voterID);
+        voteCounts[candidate] += 1; // Increment the vote count for the selected candidate
+        saveVoteCounts(); // Save vote counts to localStorage
+
+        console.log('Updated voteCounts:', voteCounts); // Debugging line
+        updateVoteCounts(); // Update the displayed vote counts
+        updateBlockchainTable(blockchain);
+        localStorage.setItem('blockchain', JSON.stringify(blockchain));
+      
+      }}
+
+  function isVoterVoted(voterID) {
+  const votedVoters = JSON.parse(localStorage.getItem('votedVoters')) || [];
+  return votedVoters.includes(voterID);
+}
+
+// Store the voter ID in localStorage
+function storeVoter(voterID) {
+  const votedVoters = JSON.parse(localStorage.getItem('votedVoters')) || [];
+  if (!votedVoters.includes(voterID)) {
+    votedVoters.push(voterID);
+    localStorage.setItem('votedVoters', JSON.stringify(votedVoters));
+  }
+}
+// Load vote counts from localStorage
+
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+
+function loadBlockchainFromLocalStorage() {
+  const storedBlockchain = localStorage.getItem('blockchain');
+
+  if (storedBlockchain) {
+    const parsedBlockchain = JSON.parse(storedBlockchain);
+
+    // Ensure blockchain object structure is correct
+    if (parsedBlockchain.chain && Array.isArray(parsedBlockchain.chain)) {
+      blockchain.chain = parsedBlockchain.chain; // Update blockchain object
+      updateBlockchainTable(blockchain); // Populate the table
+    }
+  }
+}
+
+// Function to update the table with blockchain data
+function updateBlockchainTable(blockchain) {
+  const tableBody = document.querySelector('#blockchainTable tbody');
+  tableBody.innerHTML = ''; // Clear previous rows
+
+  blockchain.chain.forEach((block, index) => {
+    block.votes.forEach((vote) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${index}</td>
+        <td>${block.timestamp}</td>
+        <td>${vote.voterID}</td>
+        <td>${vote.candidate}</td>
+        <td>${block.hash.slice(0, 20)}...</td>
+        <td>${index === 0 ? 'N/A' : block.previousHash.slice(0, 20)}...</td>
+      `;
+      tableBody.appendChild(row);
+    });
+  });}
+
+
+
+
+// Ensure the blockchain table is populated on page load
+window.onload = function () {
+
+
+  //localStorage.clear();
+
+  loadBlockchainFromLocalStorage();
+  loadVoteCounts();
+  
+};
+    
+
+
+    
+    
+    
+    
+    
+    
+
+    document.getElementById('visualizeButton').addEventListener('click', () => {
+      // Save the blockchain to localStorage
+      localStorage.setItem('blockchain', JSON.stringify(blockchain));
+
+      
+      
+      // Redirect to visualize.html
+      window.location.href = 'visualize-blockchain.html';
+    });
+    
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    function verifyVote() {
+      const encryptedIDInput = document.getElementById('encryptedIDInput').value.trim();
+      const rows = document.querySelectorAll('#blockchainTable tbody tr');
+      let voteFound = false;
+
+      rows.forEach(row => {
+        const encryptedVoterID = row.children[2].textContent.trim();
+        if (encryptedIDInput === encryptedVoterID) {
+          row.style.backgroundColor = 'lightgreen'; // Highlight the row
+          voteFound = true;
+        } else {
+          row.style.backgroundColor = ''; // Reset background
+        }
+      });
+
+      const resultDiv = document.getElementById('voteCheckResult');
+      if (voteFound) {
+        resultDiv.textContent = 'Your Vote is recorded.';
+        resultDiv.style.color = 'green';
+      } else {
+        resultDiv.textContent = 'Vote is not recorded.';
+        resultDiv.style.color = 'red';
+      }
+    }
+     // Function to display eligible voters
+    
+    
+    
+    function displayVoters() {
+      const voterListContainer = document.getElementById('voterListContainer');
+      voterListContainer.innerHTML = ''; // Clear the previous content
+      
+      // If there are no eligible voters, display a message
+      if (eligibleVoters.size === 0) {
+        voterListContainer.innerHTML = '<p>No registered voters found.</p>';
+        return;
+      }
+
+      // Loop through the Set and create HTML for each voter
+      eligibleVoters.forEach(voterID => {
+        const voterItem = document.createElement('div');
+        voterItem.classList.add('voter-list-item');
+        voterItem.textContent = `Voter ID: ${voterID}`;
+        voterListContainer.appendChild(voterItem);
+      });
+    }
+
+    // Add event listener to the button to show voters when clicked
+    document.getElementById('showVotersButton').addEventListener('click', displayVoters);
+    
+  </script>
+</body>
+</html>
